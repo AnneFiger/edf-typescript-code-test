@@ -7,16 +7,16 @@ export class BookSearchApiClient {
         private format: string
     ) {}
 
-    public async getBooksByAuthor(queryParams:{authorName: string, limit: number}){
+    public async getBooksByAuthor<Params>(queryParams:Params){
         let result = [];
         try {
             const url = this.baseUrl;
             const params = {...queryParams, format: this.format}
-            const response = await axios.get(url, {params});
+            const response = await axios.get(url, {params: params});
             if (response.status == 200) {
                 if (this.format == "json") {
                     const json = JSON.parse(response.data);
-                    result = json.map(function (item: { book: { title: any; author: any; isbn: any; }; stock: { quantity: any; price: any; }; }) {
+                    result = json.map(function (item: { book: { title: string; author: string; isbn: string; }; stock: { quantity: number; price: number; }; }) {
                         return {
                           title: item.book.title,
                           author: item.book.author,
